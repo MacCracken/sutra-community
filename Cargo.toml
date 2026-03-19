@@ -1,0 +1,33 @@
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+version = "2026.3.18"
+edition = "2024"
+license = "GPL-3.0"
+authors = ["AGNOS Contributors"]
+repository = "https://github.com/MacCracken/sutra-community"
+description = "Community modules for Sutra — AGNOS-specific and domain-specific orchestration"
+
+[workspace.dependencies]
+# Sutra core (from parent repo or crates.io)
+sutra-core = { path = "../sutra/crates/sutra-core" }
+
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Error handling
+anyhow = "1"
+thiserror = "2"
+
+# Logging
+tracing = "0.1"
+
+# HTTP
+reqwest = { version = "0.12", features = ["json"] }

@@ -1,0 +1,1 @@
+/home/macro/Repos/sutra-community/target/debug/libsutra_nftables.rlib: /home/macro/Repos/sutra/crates/sutra-core/src/lib.rs /home/macro/Repos/sutra/crates/sutra-core/src/ssh.rs /home/macro/Repos/sutra-community/crates/sutra-nftables/src/lib.rs

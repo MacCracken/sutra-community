@@ -1,0 +1,13 @@
+[package]
+name = "sutra-aegis"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Sutra module for AGNOS aegis security policy enforcement"
+
+[dependencies]
+sutra-core = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+toml = { workspace = true }
