@@ -14,48 +14,50 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check:
-    name: Format & Lint
+  fmt:
+    name: Format
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Checkout sutra (core dependency)
-      uses: actions/checkout@v4
-      with:
-        repository: MacCracken/sutra
-        path: ../sutra
     - uses: dtolnay/rust-toolchain@stable
       with:
-        components: rustfmt, clippy
-    - uses: Swatinem/rust-cache@v2
+        components: rustfmt
     - run: cargo fmt --all -- --check
+
+  clippy:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: sutra-community
+    - uses: actions/checkout@v4
+      with:
+        repository: MacCracken/sutra
+        path: sutra
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy
+    - uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: sutra-community
     - run: cargo clippy --workspace --all-targets -- -D warnings
+      working-directory: sutra-community
 
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Checkout sutra (core dependency)
-      uses: actions/checkout@v4
       with:
-        repository: MacCracken/sutra
-        path: ../sutra
-    - uses: dtolnay/rust-toolchain@stable
-    - uses: Swatinem/rust-cache@v2
-    - run: cargo test --workspace
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: [check, test]
-    steps:
+        path: sutra-community
     - uses: actions/checkout@v4
-    - name: Checkout sutra (core dependency)
-      uses: actions/checkout@v4
       with:
         repository: MacCracken/sutra
-        path: ../sutra
+        path: sutra
     - uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
-    - run: cargo build --release --workspace
+      with:
+        workspaces: sutra-community
+    - run: cargo test --workspace
+      working-directory: sutra-community

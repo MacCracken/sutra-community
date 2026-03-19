@@ -7,7 +7,7 @@
 //! - `flush` — Flush all rules (or a specific table/chain)
 //! - `list` — List current ruleset
 
-use sutra_core::{param_str, Executor, NodeInfo, SutraModule, Task, TaskPlan, TaskResult};
+use sutra_core::{Executor, NodeInfo, SutraModule, Task, TaskPlan, TaskResult, param_str};
 
 pub struct NftablesModule;
 
@@ -115,7 +115,11 @@ impl SutraModule for NftablesModule {
                     format!("nftables {} — ok", task.action)
                 }
             } else {
-                format!("nftables {} — failed: {}", task.action, result.stderr.trim())
+                format!(
+                    "nftables {} — failed: {}",
+                    task.action,
+                    result.stderr.trim()
+                )
             },
         })
     }

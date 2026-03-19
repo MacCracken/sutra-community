@@ -9,7 +9,13 @@
 | Module | Description | Domain |
 |--------|-------------|--------|
 | `sutra-nftables` | Firewall rules via nftables | System |
-| `sutra-sysctl` | Kernel parameter tuning | System |
+| `sutra-sysctl` | Kernel parameter tuning with persistence | System |
+| `sutra-cron` | Cron job management (present/absent) | System |
+| `sutra-mount` | Filesystem mount and fstab management | System |
+| `sutra-docker` | Docker container and compose management | Containers |
+| `sutra-podman` | Podman rootless containers, pods, systemd generation | Containers |
+| `sutra-k8s` | Kubernetes resources via kubectl (apply, scale, rollout, wait) | Orchestration |
+| `sutra-postgres` | PostgreSQL database, user, and privilege management | Database |
 | `sutra-aegis` | Security policy enforcement | AGNOS |
 | `sutra-daimon` | Agent lifecycle and fleet reporting | AGNOS |
 | `sutra-edge` | Edge node operations | AGNOS |

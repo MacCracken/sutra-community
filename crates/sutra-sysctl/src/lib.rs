@@ -5,15 +5,13 @@
 //! - `get` — Read a sysctl parameter value
 //! - `apply` — Apply all parameters from a sysctl.conf file
 
-use sutra_core::{param_str, Executor, NodeInfo, SutraModule, Task, TaskPlan, TaskResult};
+use sutra_core::{Executor, NodeInfo, SutraModule, Task, TaskPlan, TaskResult, param_str};
 
 pub struct SysctlModule;
 
 impl SysctlModule {
     async fn current_value(&self, exec: &Executor, key: &str) -> anyhow::Result<Option<String>> {
-        let result = exec
-            .exec(&format!("sysctl -n {} 2>/dev/null", key))
-            .await?;
+        let result = exec.exec(&format!("sysctl -n {} 2>/dev/null", key)).await?;
         if result.success() {
             Ok(Some(result.stdout.trim().to_string()))
         } else {
@@ -43,14 +41,8 @@ impl SutraModule for SysctlModule {
                 let value = param_str(task, "value", "");
                 let current = self.current_value(exec, key).await?;
                 match current {
-                    Some(v) if v == value => (
-                        false,
-                        format!("{} = {} (already set)", key, value),
-                    ),
-                    Some(v) => (
-                        true,
-                        format!("{}: {} -> {}", key, v, value),
-                    ),
+                    Some(v) if v == value => (false, format!("{} = {} (already set)", key, value)),
+                    Some(v) => (true, format!("{}: {} -> {}", key, v, value)),
                     None => (true, format!("set {} = {}", key, value)),
                 }
             }
@@ -87,9 +79,7 @@ impl SutraModule for SysctlModule {
                 let persist = param_str(task, "persist", "true") == "true";
 
                 // Set runtime value.
-                let result = exec
-                    .exec(&format!("sysctl -w {}={}", key, value))
-                    .await?;
+                let result = exec.exec(&format!("sysctl -w {}={}", key, value)).await?;
 
                 if !result.success() {
                     return Ok(TaskResult {
@@ -123,9 +113,7 @@ impl SutraModule for SysctlModule {
             }
             "get" => {
                 let key = param_str(task, "key", "");
-                let result = exec
-                    .exec(&format!("sysctl -n {}", key))
-                    .await?;
+                let result = exec.exec(&format!("sysctl -n {}", key)).await?;
                 Ok(TaskResult {
                     module: self.name().to_string(),
                     action: task.action.clone(),
@@ -136,9 +124,7 @@ impl SutraModule for SysctlModule {
             }
             "apply" => {
                 let src = param_str(task, "src", "");
-                let result = exec
-                    .exec(&format!("sysctl -p {}", src))
-                    .await?;
+                let result = exec.exec(&format!("sysctl -p {}", src)).await?;
                 Ok(TaskResult {
                     module: self.name().to_string(),
                     action: task.action.clone(),
@@ -155,12 +141,7 @@ impl SutraModule for SysctlModule {
         }
     }
 
-    async fn check(
-        &self,
-        task: &Task,
-        _node: &NodeInfo,
-        exec: &Executor,
-    ) -> anyhow::Result<bool> {
+    async fn check(&self, task: &Task, _node: &NodeInfo, exec: &Executor) -> anyhow::Result<bool> {
         match task.action.as_str() {
             "set" => {
                 let key = param_str(task, "key", "");
