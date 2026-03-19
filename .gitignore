@@ -1,0 +1,24 @@
+# Build
+/target/
+**/*.rs.bk
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Lock file (library-only workspace — consumers resolve deps)
+Cargo.lock
